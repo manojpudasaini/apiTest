@@ -1,26 +1,51 @@
-// var dbConnection = require("../../config/dbconfig");
+const sequelize = require("sequelize");
 
-// var Product = (product) => {
-//   this.title = product.title;
-//   this.description = product.description;
-//   this.price = product.price;
-//   this.category = product.category;
-//   this.image = product.image;
-//   this.rate = product.rate;
-// };
+module.exports = (sequelize, DataTypes) => {
+  const Product = sequelize.define("Product", {
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    description: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    price: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    category: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    image: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+      rate: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+        },
+      },
+    },
+  });
+  return Product;
+};
 
-// //get all products
-
-// Product.getAllProducts = (result) => {
-//   dbConnection.query("SELECT * FROM products", (err, res) => {
-//     if (err) {
-//       console.log("error while fetching products", err);
-//       result(null, err);
-//     } else {
-//       console.log("products fetched successfully");
-//       result(null, res);
-//     }
-//   });
-// };
-
-// module.exports = Product;
+// id, title, price, description, category, image, rate

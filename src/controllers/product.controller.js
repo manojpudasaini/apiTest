@@ -1,15 +1,17 @@
-// const ProductModel = require("../models/product.model");
+const { Product } = require("../models");
 
-// //get product details
-
-// exports.getProductDetails = (req, res) => {
-//   console.log("Details of Product");
-//   ProductModel.getAllProducts((err, products) => {
-//     console.log("We are  fetching products ");
-//     if (err) {
-//       res.send(err);
-//     }
-//     console.log("products>>", products);
-//     res.send(products);
-//   });
-// };
+exports.postProductDetails = async (req, res) => {
+  const product = await Product.create({
+    title: "product_title",
+    description: "product_description",
+    price: 100,
+    category: "my_category",
+    image: "image_link",
+  }).catch((err) => {
+    if (err) {
+      console.log(err);
+    }
+  });
+  res.send(product);
+  return product;
+};
