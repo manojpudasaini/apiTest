@@ -1,16 +1,25 @@
 const express = require("express");
 const { sequelize } = require("./src/models");
+const cors = require("cors");
 
 const app = express();
 
-const port = process.env.PORT || 5000;
-
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(cors());
 const db = require("./src/models");
 
 const productRoutes = require("./src/routes/product.route");
-app.use("/create", productRoutes);
+app.use("/product", productRoutes);
 
-db.sequelize.sync().then((req) => {
+const userRoutes = require("./src/routes/user.route");
+app.use("/users", userRoutes);
+
+// const khaltiRoutes = require("./src/routes/khalti.route");
+// app.use("/khalti", khaltiRoutes);
+
+const port = process.env.PORT || 5000;
+db.sequelize.sync({ force: true }).then(() => {
   app.listen(port, async () => {
     console.log("server running");
     try {

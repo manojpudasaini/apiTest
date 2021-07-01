@@ -2,6 +2,11 @@ const sequelize = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
   const Product = sequelize.define("Product", {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
     title: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -17,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     price: {
-      type: DataTypes.FLOAT,
+      type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
       validate: {
         notEmpty: true,
@@ -36,12 +41,12 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notEmpty: true,
       },
-      rate: {
-        type: DataTypes.FLOAT,
-        allowNull: false,
-        validate: {
-          notEmpty: true,
-        },
+    },
+    requirePrescription: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
       },
     },
   });

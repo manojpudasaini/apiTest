@@ -1,17 +1,59 @@
 const { Product } = require("../models");
-
+const { cloudinary } = require("../utils/cloudinary");
 exports.postProductDetails = async (req, res) => {
-  const product = await Product.create({
-    title: "product_title",
-    description: "product_description",
-    price: 100,
-    category: "my_category",
-    image: "image_link",
-  }).catch((err) => {
-    if (err) {
-      console.log(err);
-    }
-  });
-  res.send(product);
-  return product;
+  if (!req.body) {
+    res.status(400).send({
+      message: "Content cannot be empty!",
+    });
+    return;
+  }
+  try {
+    const Img = req.body.image;
+    var uploadedResponse = await cloudinary.uploader.upload(Img, {
+      upload_preset: "neppharm_products",
+    });
+    console.log(uploadedResponse);
+  } catch (error) {
+    res.status(500).send({
+      message: error.message || "Error while uploading to cloudinary",
+    });
+  }
+  const product = {
+    title: req.body.title,
+    description: req.body.description,
+    price: req.body.price,
+    category: req.body.category,
+    image: uploadedResponse.url,
+    requirePrescription: req.body.requirePrescription,
+  };
+  Product.create(product)
+    .then((result) => res.send(result))
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "some error occurred while creating products",
+      });
+    });
+};
+
+exports.getAllProducts = (req, res) => {
+  Product.findAll()
+    .then((products) => res.send(products))
+    .catch((error) =>
+      res.status(500).send({
+        message: error.message || "failed to fetch requested information",
+      })
+    );
+};
+
+exports.getSelectedProduct = (req, res) => {
+  const id = req.params.id;
+  Product.findByPk(id)
+    .then((product) => {
+      res.send(product);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: "error retrieving product with id =" + id,
+      });
+    });
 };
