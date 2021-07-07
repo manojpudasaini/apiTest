@@ -21,6 +21,7 @@ exports.postUserDetails = async (req, res) => {
   }
 
   const user = {
+    id: req.body.uid,
     fullName: req.body.fullName,
     email: req.body.email,
     phone: req.body.phone,
